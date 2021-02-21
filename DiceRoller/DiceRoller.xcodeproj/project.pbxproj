@@ -11,6 +11,11 @@
 		55C7AF9325E1F35300C833A8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7AF9225E1F35300C833A8 /* ContentView.swift */; };
 		55C7AF9525E1F35800C833A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55C7AF9425E1F35800C833A8 /* Assets.xcassets */; };
 		55C7AF9825E1F35800C833A8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55C7AF9725E1F35800C833A8 /* Preview Assets.xcassets */; };
+		55C7AFA125E1F46200C833A8 /* RollDiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7AFA025E1F46200C833A8 /* RollDiceView.swift */; };
+		55C7AFA425E1F8A100C833A8 /* DiceResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7AFA325E1F8A100C833A8 /* DiceResults.swift */; };
+		55C7AFA725E1F91700C833A8 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7AFA625E1F91700C833A8 /* ResultsView.swift */; };
+		55C7AFAA25E1FA6700C833A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7AFA925E1FA6700C833A8 /* SettingsView.swift */; };
+		55C7AFAD25E1FA8900C833A8 /* SettingsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7AFAC25E1FA8900C833A8 /* SettingsConfiguration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +25,11 @@
 		55C7AF9425E1F35800C833A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		55C7AF9725E1F35800C833A8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		55C7AF9925E1F35800C833A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55C7AFA025E1F46200C833A8 /* RollDiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollDiceView.swift; sourceTree = "<group>"; };
+		55C7AFA325E1F8A100C833A8 /* DiceResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceResults.swift; sourceTree = "<group>"; };
+		55C7AFA625E1F91700C833A8 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+		55C7AFA925E1FA6700C833A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		55C7AFAC25E1FA8900C833A8 /* SettingsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsConfiguration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +67,11 @@
 				55C7AF9425E1F35800C833A8 /* Assets.xcassets */,
 				55C7AF9925E1F35800C833A8 /* Info.plist */,
 				55C7AF9625E1F35800C833A8 /* Preview Content */,
+				55C7AFA025E1F46200C833A8 /* RollDiceView.swift */,
+				55C7AFA325E1F8A100C833A8 /* DiceResults.swift */,
+				55C7AFA625E1F91700C833A8 /* ResultsView.swift */,
+				55C7AFA925E1FA6700C833A8 /* SettingsView.swift */,
+				55C7AFAC25E1FA8900C833A8 /* SettingsConfiguration.swift */,
 			);
 			path = DiceRoller;
 			sourceTree = "<group>";
@@ -138,8 +153,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55C7AFA125E1F46200C833A8 /* RollDiceView.swift in Sources */,
 				55C7AF9325E1F35300C833A8 /* ContentView.swift in Sources */,
 				55C7AF9125E1F35300C833A8 /* DiceRollerApp.swift in Sources */,
+				55C7AFAA25E1FA6700C833A8 /* SettingsView.swift in Sources */,
+				55C7AFA725E1F91700C833A8 /* ResultsView.swift in Sources */,
+				55C7AFA425E1F8A100C833A8 /* DiceResults.swift in Sources */,
+				55C7AFAD25E1FA8900C833A8 /* SettingsConfiguration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
