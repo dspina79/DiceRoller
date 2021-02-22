@@ -7,7 +7,69 @@
 
 import SwiftUI
 
-struct BigDice: View {
+protocol Dice {
+    var minValue: Int {get set}
+    var maxValue: Int {get set}
+    var diceValue: Int {get set}
+}
+
+struct FourSidedDice: View, Dice {
+    var minValue = 1
+    var maxValue = 4
+    
+    @Binding var diceValue: Int
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .foregroundColor(.blue)
+                .frame(width: 100, height: 100)
+            Text("\(self.diceValue)")
+                .font(.largeTitle)
+                .foregroundColor(.white)
+        }
+    }
+}
+
+
+struct TwelveSidedDice: View, Dice {
+    var minValue = 1
+    var maxValue = 12
+    
+    @Binding var diceValue: Int
+    var body: some View {
+        ZStack {
+            Circle()
+                .foregroundColor(.blue)
+                .frame(width: 100, height: 100)
+            Text("\(self.diceValue)")
+                .font(.largeTitle)
+                .foregroundColor(.white)
+        }
+    }
+}
+
+
+struct HundredSidedDice: View, Dice {
+    var minValue = 1
+    var maxValue = 100
+    
+    @Binding var diceValue: Int
+    var body: some View {
+        ZStack {
+            Circle()
+                .foregroundColor(.blue)
+                .frame(width: 100, height: 100)
+            Text("\(self.diceValue)")
+                .font(.largeTitle)
+                .foregroundColor(.white)
+        }
+    }
+}
+
+struct SixSidedDice: View, Dice {
+    var minValue = 1
+    var maxValue = 6
+    
     @Binding var diceValue: Int
     var body: some View {
         Image(systemName: "die.face.\(self.diceValue).fill")
@@ -29,8 +91,8 @@ struct RollDiceView: View {
         NavigationView {
             VStack(alignment: .center) {
                 HStack {
-                    BigDice(diceValue: $firstDiceValue)
-                    BigDice(diceValue: $secondDiceValue)
+                    SixSidedDice(diceValue: $firstDiceValue)
+                    SixSidedDice(diceValue: $secondDiceValue)
                 }
                 Text("Roll \(currentRoll)")
                     .font(.largeTitle)

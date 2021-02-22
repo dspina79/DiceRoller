@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ResultsView: View {
-    @EnvironmentObject var diceResults: DiceResults
-    
     var body: some View {
         NavigationView {
             
