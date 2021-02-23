@@ -7,25 +7,87 @@
 
 import Foundation
 
-struct DiceResult: Codable {
+struct DiceResultRollCounter: Codable {
     var id = UUID()
-    var diceType: String = ""
-    var numberOfDice: Int = 0
-    var totalRoll: Int = 0
+    var diceType: String
+    var instanceCount: Int = 1
+}
+
+struct DiceResultValue: Codable, Comparable {
+    static func == (lhs: DiceResultValue, rhs: DiceResultValue) -> Bool {
+        return lhs.total == rhs.total
+    }
+    
+    static func < (lhs: DiceResultValue, rhs: DiceResultValue) -> Bool {
+        return lhs.total < rhs.total
+    }
+    
+    var id = UUID()
+    var total: Int
+    var counters = [DiceResultRollCounter]()
 }
 
 
-
 class DiceResults: ObservableObject, Codable {
-    var results = [DiceResult]()
+    static let DataKey = "RollResultsData"
+    var results = [DiceResultValue]()
     
-    func getTotals() -> Dictionary<Int, Int> {
-        var totals = Dictionary<Int, Int>()
+    
+    static var example: DiceResults {
+        let resultData = DiceResults()
+        resultData.addResult(diceType: "6-sided", totalRollAmount: 2)
+        resultData.addResult(diceType: "6-sided", totalRollAmount: 4)
+        resultData.addResult(diceType: "6-sided", totalRollAmount: 6)
+        resultData.addResult(diceType: "6-sided", totalRollAmount: 7)
+        resultData.addResult(diceType: "6-sided", totalRollAmount: 7)
+        resultData.addResult(diceType: "6-sided", totalRollAmount: 8)
         
-        for result in self.results {
-            totals[result.totalRoll] = (totals[result.totalRoll] ?? 0) + 1
+        resultData.addResult(diceType: "12-sided", totalRollAmount: 7)
+        resultData.addResult(diceType: "12-sided", totalRollAmount: 8)
+        resultData.addResult(diceType: "12-sided", totalRollAmount: 17)
+        resultData.addResult(diceType: "12-sided", totalRollAmount: 18)
+        
+        resultData.addResult(diceType: "100-sided", totalRollAmount: 7)
+        resultData.addResult(diceType: "100-sided", totalRollAmount: 18)
+        resultData.addResult(diceType: "100-sided", totalRollAmount: 50)
+        resultData.addResult(diceType: "100-sided", totalRollAmount: 99)
+        
+        return resultData
+    }
+    
+    func load() {
+        self.results = Self.getData()
+    }
+    
+    static func getData() -> [DiceResultValue] {
+        if let data = UserDefaults.standard.data(forKey: Self.DataKey) {
+            if let decoded = try? JSONDecoder().decode([DiceResultValue].self, from: data) {
+                return decoded
+            }
         }
-        
-        return totals
+        return [DiceResultValue]()
+    }
+    
+    func saveData() {
+        if let jsonData = try? JSONEncoder().encode(self.results) {
+            UserDefaults.standard.setValue(jsonData, forKey: Self.DataKey)
+        } else {
+            print("There was an error saving roll data.")
+        }
+    }
+    
+    func addResult(diceType: String, totalRollAmount: Int) {
+        if let diceResultIndex = results.firstIndex(where: {$0.total == totalRollAmount}) {
+            var diceResult = results[diceResultIndex]
+            if let diceCounterIndex = diceResult.counters.firstIndex(where: {$0.diceType == diceType}) {
+                diceResult.counters[diceCounterIndex].instanceCount += 1
+            } else {
+                diceResult.counters.append(DiceResultRollCounter(diceType: diceType))
+            }
+        } else {
+            var diceResult = DiceResultValue(total: totalRollAmount)
+            diceResult.counters.append(DiceResultRollCounter(diceType: diceType))
+            results.append(diceResult)
+        }
     }
 }

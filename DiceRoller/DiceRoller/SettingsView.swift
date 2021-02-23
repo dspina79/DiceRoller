@@ -28,11 +28,11 @@ struct SettingsView: View {
             }.navigationBarTitle(Text("Settings"))
             
         }.onAppear {
-            self.diceSettings = getSettings()
+            self.diceSettings = Self.getSettings()
         }
     }
     
-    func getSettings() -> DiceRollSettings {
+    static func getSettings() -> DiceRollSettings {
         if let data = UserDefaults.standard.data(forKey: DiceRollSettings.DiceSettingsKey) {
             if let decoded = try? JSONDecoder().decode(DiceRollSettings.self, from: data) {
                 return decoded

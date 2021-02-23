@@ -48,6 +48,23 @@ struct TwelveSidedDice: View, Dice {
     }
 }
 
+struct TwentySidedDice: View, Dice {
+    var minValue = 1
+    var maxValue = 20
+    
+    @Binding var diceValue: Int
+    var body: some View {
+        ZStack {
+            Circle()
+                .foregroundColor(.blue)
+                .frame(width: 100, height: 100)
+            Text("\(self.diceValue)")
+                .font(.largeTitle)
+                .foregroundColor(.white)
+        }
+    }
+}
+
 
 struct HundredSidedDice: View, Dice {
     var minValue = 1
@@ -83,6 +100,8 @@ struct SixSidedDice: View, Dice {
 struct RollDiceView: View {
     @State private var firstDiceValue: Int = 1
     @State private var secondDiceValue: Int = 2
+    @State private var diceType: String = "6-sided"
+    
     private var currentRoll: Int {
         return firstDiceValue + secondDiceValue
     }
@@ -91,24 +110,60 @@ struct RollDiceView: View {
         NavigationView {
             VStack(alignment: .center) {
                 HStack {
-                    SixSidedDice(diceValue: $firstDiceValue)
-                    SixSidedDice(diceValue: $secondDiceValue)
+                    if diceType == "4-sided" {
+                        FourSidedDice(diceValue: $firstDiceValue)
+                        FourSidedDice(diceValue: $secondDiceValue)
+                    } else if diceType == "6-sided" {
+                        SixSidedDice(diceValue: $firstDiceValue)
+                        SixSidedDice(diceValue: $secondDiceValue)
+                    } else if diceType == "12-sided" {
+                        TwelveSidedDice(diceValue: $firstDiceValue)
+                        TwelveSidedDice(diceValue: $secondDiceValue)
+                    } else if diceType == "20-sided" {
+                        TwentySidedDice(diceValue: $firstDiceValue)
+                        TwentySidedDice(diceValue: $secondDiceValue)
+                    } else {
+                        HundredSidedDice(diceValue: $firstDiceValue)
+                        HundredSidedDice(diceValue: $secondDiceValue)
+                    }
                 }
                 Text("Roll \(currentRoll)")
                     .font(.largeTitle)
                 
-                Button("Roll", action: roll)
+                Button("Roll") {
+                    roll(diceTypeName: self.diceType)
+                }
                     .padding()
                     .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                     .background(Color.gray)
                     .foregroundColor(.white)
                     .clipShape(Capsule())
             }
-        }
+        }.onAppear(perform: loadSettingData)
     }
     
-    func roll() {
-        let possibleValues: [Int] = [1,2,3,4,5,6]
+    func loadSettingData() {
+        self.diceType = SettingsView.getSettings().diceType
+    }
+    
+    func getDiceView(diceType: String) -> Dice {
+        let val: Int = 0
+        if diceType == "4-sided" {
+            return FourSidedDice(diceValue: .constant(val))
+        } else if diceType == "6-sided" {
+            return SixSidedDice(diceValue: .constant(val))
+        } else if diceType == "12-sided" {
+            return TwelveSidedDice(diceValue: .constant(val))
+        } else if diceType == "20-sided" {
+            return TwentySidedDice(diceValue: .constant(val))
+        }
+        return HundredSidedDice(diceValue: .constant(val))
+        
+    }
+    
+    func roll(diceTypeName: String) {
+        let diceType = getDiceView(diceType: diceTypeName)
+        let possibleValues: [Int] = Array(diceType.minValue...diceType.maxValue)
         self.firstDiceValue = possibleValues.randomElement() ?? 1
         self.secondDiceValue = possibleValues.randomElement() ?? 1
     }
