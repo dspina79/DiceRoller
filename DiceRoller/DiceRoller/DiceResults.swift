@@ -78,11 +78,10 @@ class DiceResults: ObservableObject, Codable {
     
     func addResult(diceType: String, totalRollAmount: Int) {
         if let diceResultIndex = results.firstIndex(where: {$0.total == totalRollAmount}) {
-            var diceResult = results[diceResultIndex]
-            if let diceCounterIndex = diceResult.counters.firstIndex(where: {$0.diceType == diceType}) {
-                diceResult.counters[diceCounterIndex].instanceCount += 1
+            if let diceCounterIndex = results[diceResultIndex].counters.firstIndex(where: {$0.diceType == diceType}) {
+                results[diceResultIndex].counters[diceCounterIndex].instanceCount += 1
             } else {
-                diceResult.counters.append(DiceResultRollCounter(diceType: diceType))
+                results[diceResultIndex].counters.append(DiceResultRollCounter(diceType: diceType))
             }
         } else {
             var diceResult = DiceResultValue(total: totalRollAmount)
