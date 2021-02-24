@@ -25,7 +25,14 @@ struct SettingsView: View {
                         }
                     }
                 }
+                Section {
+                    Button("Save") {
+                        saveSettings()
+                    }
+                }
             }.navigationBarTitle(Text("Settings"))
+            
+           
             
         }.onAppear {
             self.diceSettings = Self.getSettings()

@@ -7,7 +7,11 @@
 
 import Foundation
 
-struct DiceResultRollCounter: Codable {
+struct DiceResultRollCounter: Codable, Comparable {
+    static func < (lhs: DiceResultRollCounter, rhs: DiceResultRollCounter) -> Bool {
+        return lhs.diceType < rhs.diceType
+    }
+    
     var id = UUID()
     var diceType: String
     var instanceCount: Int = 1
@@ -55,13 +59,20 @@ class DiceResults: ObservableObject, Codable {
         return resultData
     }
     
+    init() {
+        load()
+    }
+    
     func load() {
         self.results = Self.getData()
     }
     
     static func getData() -> [DiceResultValue] {
+        
         if let data = UserDefaults.standard.data(forKey: Self.DataKey) {
+            print("Data found!")
             if let decoded = try? JSONDecoder().decode([DiceResultValue].self, from: data) {
+                print("Data decoded")
                 return decoded
             }
         }
@@ -69,6 +80,7 @@ class DiceResults: ObservableObject, Codable {
     }
     
     func saveData() {
+        print("Attempting to save results with \(self.results.count) items.")
         if let jsonData = try? JSONEncoder().encode(self.results) {
             UserDefaults.standard.setValue(jsonData, forKey: Self.DataKey)
         } else {
@@ -77,6 +89,7 @@ class DiceResults: ObservableObject, Codable {
     }
     
     func addResult(diceType: String, totalRollAmount: Int) {
+        print("Adding result for \(diceType) - \(totalRollAmount)")
         if let diceResultIndex = results.firstIndex(where: {$0.total == totalRollAmount}) {
             if let diceCounterIndex = results[diceResultIndex].counters.firstIndex(where: {$0.diceType == diceType}) {
                 results[diceResultIndex].counters[diceCounterIndex].instanceCount += 1

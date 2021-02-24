@@ -98,9 +98,13 @@ struct SixSidedDice: View, Dice {
 }
 
 struct RollDiceView: View {
+    let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
+    
     @State private var firstDiceValue: Int = 1
     @State private var secondDiceValue: Int = 2
     @State private var diceType: String = "6-sided"
+    
+    static var rollCounter = 11 // off
     
     private var currentRoll: Int {
         return firstDiceValue + secondDiceValue
@@ -131,7 +135,7 @@ struct RollDiceView: View {
                     .font(.largeTitle)
                 
                 Button("Roll") {
-                    roll(diceTypeName: self.diceType)
+                    Self.rollCounter = 0
                 }
                     .padding()
                     .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
@@ -139,7 +143,19 @@ struct RollDiceView: View {
                     .foregroundColor(.white)
                     .clipShape(Capsule())
             }
-        }.onAppear(perform: loadSettingData)
+        }
+        .onAppear(perform: loadSettingData)
+        .onReceive(self.timer, perform: { time in
+            if Self.rollCounter == 10 {
+                roll(diceTypeName: self.diceType, saveData: true)
+                Self.rollCounter += 1
+            } else if Self.rollCounter < 10 {
+                roll(diceTypeName: diceType, saveData: false)
+                Self.rollCounter += 1
+            } else {
+                // pass
+            }
+        })
     }
     
     func loadSettingData() {
@@ -161,11 +177,18 @@ struct RollDiceView: View {
         
     }
     
-    func roll(diceTypeName: String) {
+    func roll(diceTypeName: String, saveData: Bool) {
         let diceType = getDiceView(diceType: diceTypeName)
         let possibleValues: [Int] = Array(diceType.minValue...diceType.maxValue)
         self.firstDiceValue = possibleValues.randomElement() ?? 1
         self.secondDiceValue = possibleValues.randomElement() ?? 1
+        
+        if saveData {
+            // save the data
+            let diceResults = DiceResults()
+            diceResults.addResult(diceType: diceTypeName, totalRollAmount: currentRoll)
+            diceResults.saveData()
+        }
     }
 }
 
